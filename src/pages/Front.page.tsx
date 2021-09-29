@@ -10,6 +10,9 @@ const FrontPage = () => {
       <li>
         <Link to='/image-cropper'>Image Cropper</Link>
       </li>
+      <li>
+        <Link to='/image-drag-drop'>Image Drag and Drop</Link>
+      </li>
     </ul>
   )
 }

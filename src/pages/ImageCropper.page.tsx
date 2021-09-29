@@ -1,18 +1,20 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import ReactCrop, { Crop } from 'react-image-crop'
 
+const initialCrop: Crop = {
+  unit: 'px',
+  width: 100,
+  height: 100,
+  x: 0,
+  y: 0,
+  aspect: 1,
+}
+
 const ImageCropperPage = () => {
   const fileReader = useRef(new FileReader())
   const [selectedFile, setSelectedFile] = useState<string | ArrayBuffer | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [crop, setCrop] = useState<Partial<Crop>>({
-    unit: 'px',
-    width: 100,
-    height: 100,
-    x: 0,
-    y: 0,
-    aspect: 1,
-  })
+  const [crop, setCrop] = useState<Partial<Crop>>(initialCrop)
   const imageRef = useRef<HTMLImageElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -51,6 +53,7 @@ const ImageCropperPage = () => {
       const ctx = canvasRef.current.getContext('2d')
       if (ctx) {
         ctx.imageSmoothingQuality = 'high'
+        ctx.imageSmoothingEnabled = true
         ctx.drawImage(
           imageRef.current,
           c.x * scaleX,
@@ -66,20 +69,47 @@ const ImageCropperPage = () => {
     }
   }
 
+  const resetState = () => {
+    setSelectedFile(null)
+    setCrop(initialCrop)
+  }
+
   return (
     <div>
       {isLoading && <p>Now loading ...</p>}
 
-      <div>
-        <label htmlFor='input-image-file'>Image file</label>
+      <label
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          maxWidth: 400,
+          height: 50,
+          padding: '20px',
+          margin: '0 auto',
+          cursor: 'pointer',
+          borderRadius: 3,
+          border: '2px dashed #eee',
+          backgroundColor: '#fafafa',
+          color: '#bdbdbd',
+        }}
+      >
+        <span>{"Drag 'n' drop a file here, or click to select a file"}</span>
         <input
-          id='input-image-file'
+          style={{ display: 'none' }}
           multiple={false}
           type='file'
           accept='image/png,image/jpeg'
           onChange={handleSelectFile}
           disabled={isLoading}
         />
+      </label>
+
+      <div>
+        <button type='button' onClick={() => resetState()}>
+          Reset
+        </button>
       </div>
 
       {selectedFile && (
