@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import FrontPage from './pages/Front.page'
 import ImageUploaderPage from './pages/ImageUploader.page'
@@ -10,13 +10,13 @@ const App = () => {
   return (
     <BrowserRouter>
       <Layout>
-        <Switch>
-          <Route exact path='/' component={FrontPage} />
-          <Route exact path='/image-uploader' component={ImageUploaderPage} />
-          <Route exact path='/image-cropper' component={ImageCropperPage} />
-          <Route exact path='/image-drag-drop' component={ImageDragDropPage} />
-          <Route render={() => <p>Page not found</p>} />
-        </Switch>
+        <Routes>
+          <Route path='/' element={<FrontPage />} />
+          <Route path='/image-uploader' element={<ImageUploaderPage />} />
+          <Route path='/image-cropper' element={<ImageCropperPage />} />
+          <Route path='/image-drag-drop' element={<ImageDragDropPage />} />
+          <Route path='*' element={<p>Page not found</p>} />
+        </Routes>
       </Layout>
     </BrowserRouter>
   )
